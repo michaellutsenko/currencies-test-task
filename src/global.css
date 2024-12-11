@@ -1,0 +1,100 @@
+html {
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  height: 100vh;
+}
+
+body {
+  height: 100%;
+  overflow-y: hidden;
+  background: #fcfcfc;
+
+  header {
+    padding: .5rem;
+    margin-bottom: 1rem;
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1.5;
+      padding-left: 2rem
+    }
+  }
+}
+
+#root {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+#currency-table {
+  width: 100%;
+
+  thead {
+    border-bottom: 1px solid #ccc;
+  }
+
+  tbody {
+    tr {
+      &:nth-of-type(odd) {
+        background: white;
+      }
+    }
+  }
+
+  td,
+  th {
+    padding-block: .7em;
+    text-align: center;
+    line-height: 2em;
+
+    &:first-child {
+      padding-left: 2rem;
+      text-align: left;
+    }
+
+    &:last-child {
+      padding-right: 2rem;
+    }
+  }
+
+  th {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  .editable-value-container {
+    display: inline-flex;
+    width: 12rem;
+    gap: .5em;
+
+    form {
+      display: contents;
+    }
+
+    span,
+    input[type="number"] {
+      flex: 1;
+    }
+
+    span {
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    input[type="number"] {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: .5em;
+      height: 2em;
+      box-sizing: border-box;
+    }
+  }
+}

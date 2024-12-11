@@ -70,7 +70,7 @@ export function CurrencyTable() {
 
   return (
     <>
-      <table>
+      <table id="currency-table">
         <thead>
           <tr>
             <th>Name</th>
@@ -86,7 +86,7 @@ export function CurrencyTable() {
                 <tr key={id}>
                   <td>{rate.name}</td>
                   <td>{rate.unit}</td>
-                  <td>
+                  <td className="currency-value">
                     <EditableCurrencyRateValue
                       currencyId={id}
                       value={rate.value}
@@ -118,39 +118,41 @@ function EditableCurrencyRateValue({
 
   if (edit) {
     return (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmitNewValue(currencyId, inputValue);
-          setEdit(false);
-        }}
-      >
-        <input
-          name="value"
-          type="number"
-          value={inputValue}
-          onChange={(e) => setInputValue(Number(e.target.value))}
-        />
-        <button type="submit">Save</button>
-        <button
-          type="button"
-          onClick={() => {
+      <div className="editable-value-container">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmitNewValue(currencyId, inputValue);
             setEdit(false);
-            setInputValue(value);
           }}
         >
-          Cancel
-        </button>
-      </form>
+          <input
+            name="value"
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(Number(e.target.value))}
+          />
+          <button type="submit">✓</button>
+          <button
+            type="button"
+            onClick={() => {
+              setEdit(false);
+              setInputValue(value);
+            }}
+          >
+            ✕
+          </button>
+        </form>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="editable-value-container">
       <span>{value}</span>
       <button type="button" onClick={() => setEdit(true)}>
-        Edit
+        &#x270e;
       </button>
-    </>
+    </div>
   );
 }
