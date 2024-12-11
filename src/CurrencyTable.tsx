@@ -87,7 +87,7 @@ export function CurrencyTable() {
                   <td>{rate.name}</td>
                   <td>{rate.unit}</td>
                   <td>
-                    <EditableValue
+                    <EditableCurrencyRateValue
                       currencyId={id}
                       value={rate.value}
                       onSubmitNewValue={updateCurrencyRate}
@@ -104,7 +104,7 @@ export function CurrencyTable() {
   );
 }
 
-function EditableValue({
+function EditableCurrencyRateValue({
   currencyId,
   value,
   onSubmitNewValue,
