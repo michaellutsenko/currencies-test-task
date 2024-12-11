@@ -18,6 +18,10 @@ function useCurrencyRates(): {
   error: Error | null;
   updateCurrencyRate: (currencyId: string, value: number) => void;
 } {
+  // Normally, there would also be a request status state (loading, error, etc.)
+  // but in this case we really don't care about the loading state.
+  // Two state variables are quite enough to represent the whole intended state machine.
+  // But then again, normally there would be something like react-query to handle these things
   const [data, setData] = useState<CurrencyRateResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
@@ -41,6 +45,7 @@ function useCurrencyRates(): {
 
     fetchCurrencyRates();
 
+    // Guaranteed to fire at least once in strict mode
     return () => {
       controller.abort();
     };
@@ -55,10 +60,6 @@ function useCurrencyRates(): {
       setData(newData);
     },
   };
-}
-
-function toSentenceCase(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 export function CurrencyTable() {
@@ -166,4 +167,8 @@ function EditableCurrencyRateValue({
       </button>
     </div>
   );
+}
+
+function toSentenceCase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
