@@ -1,9 +1,14 @@
-function App() {
+import { CurrencyTable } from './CurrencyTable';
+
+export default function App() {
   return (
-    <main>
-      <h1>Currencies</h1>
-    </main>
+    <>
+      <header>
+        <h1>Currencies</h1>
+      </header>
+      <main>
+        <CurrencyTable />
+      </main>
+    </>
   );
 }
-
-export default App;
