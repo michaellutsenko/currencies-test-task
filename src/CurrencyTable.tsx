@@ -57,6 +57,10 @@ function useCurrencyRates(): {
   };
 }
 
+function toSentenceCase(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export function CurrencyTable() {
   const { data, error, updateCurrencyRate } = useCurrencyRates();
 
@@ -70,7 +74,7 @@ export function CurrencyTable() {
 
   return (
     <>
-      <table id="currency-table">
+      <table id="currency-table" aria-describedby="top-heading">
         <thead>
           <tr>
             <th>Name</th>
@@ -93,7 +97,7 @@ export function CurrencyTable() {
                       onSubmitNewValue={updateCurrencyRate}
                     />
                   </td>
-                  <td>{rate.type}</td>
+                  <td>{toSentenceCase(rate.type)}</td>
                 </tr>
               );
             }
@@ -132,9 +136,12 @@ function EditableCurrencyRateValue({
             value={inputValue}
             onChange={(e) => setInputValue(Number(e.target.value))}
           />
-          <button type="submit">✓</button>
+          <button type="submit" aria-label="Save changes">
+            ✓
+          </button>
           <button
             type="button"
+            aria-label="Cancel changes"
             onClick={() => {
               setEdit(false);
               setInputValue(value);
@@ -150,7 +157,11 @@ function EditableCurrencyRateValue({
   return (
     <div className="editable-value-container">
       <span>{value}</span>
-      <button type="button" onClick={() => setEdit(true)}>
+      <button
+        type="button"
+        aria-label="Edit value"
+        onClick={() => setEdit(true)}
+      >
         &#x270e;
       </button>
     </div>
