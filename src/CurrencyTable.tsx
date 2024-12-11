@@ -16,6 +16,7 @@ interface CurrencyRateResponse {
 function useCurrencyRates(): {
   data: CurrencyRateResponse | null;
   error: Error | null;
+  updateCurrencyRate: (currencyId: string, value: number) => void;
 } {
   const [data, setData] = useState<CurrencyRateResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
@@ -45,11 +46,19 @@ function useCurrencyRates(): {
     };
   }, [setData, setError]);
 
-  return { data, error };
+  return {
+    data,
+    error,
+    updateCurrencyRate: (currencyId, value) => {
+      const newData = { ...data } as CurrencyRateResponse;
+      newData.rates[currencyId].value = value;
+      setData(newData);
+    },
+  };
 }
 
 export function CurrencyTable() {
-  const { data, error } = useCurrencyRates();
+  const { data, error, updateCurrencyRate } = useCurrencyRates();
 
   if (error) {
     return <p>{error.message}</p>;
@@ -60,29 +69,88 @@ export function CurrencyTable() {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Unit</th>
-          <th>Value</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries((data as CurrencyRateResponse).rates).map(
-          ([id, rate]) => {
-            return (
-              <tr key={id}>
-                <td>{rate.name}</td>
-                <td>{rate.unit}</td>
-                <td>{rate.value}</td>
-                <td>{rate.type}</td>
-              </tr>
-            );
-          }
-        )}
-      </tbody>
-    </table>
+    <>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit</th>
+            <th>Value</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries((data as CurrencyRateResponse).rates).map(
+            ([id, rate]) => {
+              return (
+                <tr key={id}>
+                  <td>{rate.name}</td>
+                  <td>{rate.unit}</td>
+                  <td>
+                    <EditableValue
+                      currencyId={id}
+                      value={rate.value}
+                      onSubmitNewValue={updateCurrencyRate}
+                    />
+                  </td>
+                  <td>{rate.type}</td>
+                </tr>
+              );
+            }
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+function EditableValue({
+  currencyId,
+  value,
+  onSubmitNewValue,
+}: {
+  currencyId: string;
+  value: number;
+  onSubmitNewValue: (currencyId: string, value: number) => void;
+}) {
+  const [edit, setEdit] = useState(false);
+  const [inputValue, setInputValue] = useState(value);
+
+  if (edit) {
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitNewValue(currencyId, inputValue);
+          setEdit(false);
+        }}
+      >
+        <input
+          name="value"
+          type="number"
+          value={inputValue}
+          onChange={(e) => setInputValue(Number(e.target.value))}
+        />
+        <button type="submit">Save</button>
+        <button
+          type="button"
+          onClick={() => {
+            setEdit(false);
+            setInputValue(value);
+          }}
+        >
+          Cancel
+        </button>
+      </form>
+    );
+  }
+
+  return (
+    <>
+      <span>{value}</span>
+      <button type="button" onClick={() => setEdit(true)}>
+        Edit
+      </button>
+    </>
   );
 }
